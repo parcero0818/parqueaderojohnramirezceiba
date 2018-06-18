@@ -61,37 +61,22 @@ public class VigilanteService implements IVigilanteService {
 	}
 
 	public boolean isCarro(Vehiculo vehiculo) {
-		if (vehiculo.getTipoVehiculo().equalsIgnoreCase(TipoVehiculoEnum.CARRO.getTipoVehiculo())) {
-			return true;
-		} else {
-			return false;
-		}
+		return vehiculo.getTipoVehiculo().equalsIgnoreCase(TipoVehiculoEnum.CARRO.getTipoVehiculo());
 	}
 
 	public boolean isMoto(Vehiculo vehiculo) {
-		if (vehiculo.getTipoVehiculo().equalsIgnoreCase(TipoVehiculoEnum.MOTO.getTipoVehiculo())) {
-			return true;
-		}
-		return false;
+		 return vehiculo.getTipoVehiculo().equalsIgnoreCase(TipoVehiculoEnum.MOTO.getTipoVehiculo());
 	}
 
 	public boolean verificarDiaSemana(Calendar calendar) {
-		if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
-				|| calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
-			return true;
-		} else {
-			return false;
-		}
+		return calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
+				|| calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
 	}
 
 	public boolean verificarPlaca(String placa) {
 		String placasBd = propiedadesRepositorio.obtenerValorPropiedad(PropiedadesParqueadero.PLACASPERMITIDAS.getNombrePropiedad());
 		String[] placas = placasBd.toLowerCase().split(",");
-		if (!Arrays.asList(placas).contains(placa.toLowerCase().substring(0, 1))) {
-			return false;
-		}
-		return true;
-		
+		return !Arrays.asList(placas).contains(placa.toLowerCase().substring(0, 1));
 	}
 
 }
