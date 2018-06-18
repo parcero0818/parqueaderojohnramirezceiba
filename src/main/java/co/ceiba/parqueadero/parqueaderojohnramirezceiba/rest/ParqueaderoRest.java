@@ -37,8 +37,8 @@ public class ParqueaderoRest {
 	@PostMapping(value = "/parqueaderos")
 	public ResponseEntity<HttpStatus> parqueaderos(@RequestBody Vehiculo vehiculo) {
 		Calendar calendar = Calendar.getInstance();
-		boolean isRegistro = vigilanteService.registrarIngreso(vehiculo, calendar);
-		if (isRegistro) {
+		TiqueteParqueo tiquete = vigilanteService.registrarIngreso(vehiculo, calendar);
+		if (null != tiquete) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

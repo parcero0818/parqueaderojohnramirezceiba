@@ -15,9 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestBuild;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestPlacaPermitidaBuild;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestVehiculoNoPermitBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.enums.PropiedadesParqueadero;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.DisponibilidadExcepcion;
-import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Propiedades;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.TiqueteParqueo;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Vehiculo;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.repositorio.PropiedadesRepositorio;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.repositorio.TiqueteParqueoRepositorio;
@@ -31,7 +33,6 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 	IVigilanteService vigilanteService;
 	@Autowired
 	IParqueaderoService parqueaderoService;
-	
 	@Autowired
 	PropiedadesRepositorio propiedadesRepositorio;
 
@@ -42,7 +43,7 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-	
+
 	@Test
 	public void parqueaderoDisponibleCarros() {
 		// Arrange
@@ -61,9 +62,9 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		when(tiqueteParqueoRepositorio.cantidadCarrosParqueados()).thenReturn(20);
 		// Act
 		try {
-		parqueaderoService.verificarDisponibilidadCarro(tiqueteParqueoRepositorio);
-		
-		}catch(DisponibilidadExcepcion e) {
+			parqueaderoService.verificarDisponibilidadCarro(tiqueteParqueoRepositorio);
+
+		} catch (DisponibilidadExcepcion e) {
 			// Assert
 			Assert.assertEquals("No hay cupo", e.getMessage());
 		}
@@ -88,82 +89,105 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		// Act
 		try {
 			parqueaderoService.verificarDisponibilidadMoto(tiqueteParqueoRepositorio);
-		}catch (DisponibilidadExcepcion e) {
+		} catch (DisponibilidadExcepcion e) {
 			// TODO: handle exception
 			// Assert
 			Assert.assertEquals("No hay cupo", e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void placaPermitida() {
-		//Arrange
+		// Arrange
 		Vehiculo vehiculo = new VehiculoTestBuild().build();
-		//Act
+		// Act
 		boolean validarPlaca = vigilanteService.verificarPlaca(vehiculo.getPlaca());
-		//Assert
+		// Assert
+		Assert.assertTrue(validarPlaca);
+	}
+
+	@Test
+	public void placaNoPermitida() {
+		// Arrange
+		Vehiculo vehiculo = new VehiculoTestPlacaPermitidaBuild().build();
+		// Act
+		boolean validarPlaca = vigilanteService.verificarPlaca(vehiculo.getPlaca());
+		// Assert
 		Assert.assertFalse(validarPlaca);
 	}
-	
+
 	@Test
 	public void verificarDomingo() {
-		//Arrange
+		// Arrange
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-		//Act
+		// Act
 		boolean isDomingo = vigilanteService.verificarDiaSemana(calendar);
-		//Assert
+		// Assert
 		Assert.assertTrue(isDomingo);
 	}
-	
+
 	@Test
 	public void verificarLunes() {
-		//Arrange
+		// Arrange
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-		//Act
+		// Act
 		boolean isLunes = vigilanteService.verificarDiaSemana(calendar);
-		//Assert
+		// Assert
 		Assert.assertTrue(isLunes);
 	}
-	
+
 	@Test
-	public void verificarNoLunesNiDomingo() {
-		//Arrange
+	public void verificarOtroDia() {
+		// Arrange
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-		//Act
+		// Act
 		boolean noEsLunesNiDomingo = vigilanteService.verificarDiaSemana(calendar);
-		//Assert
+		// Assert
 		Assert.assertFalse(noEsLunesNiDomingo);
 	}
-	
-	@Test
-	public void registrarIngreso() {
-		//Arrange
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-		Vehiculo vehiculo = new VehiculoTestBuild().build();
-		//Act
-		boolean isRegistro = vigilanteService.registrarIngreso(vehiculo, calendar);
-		//Assert
-		Assert.assertTrue(isRegistro);
-	}
-	
+
 	@Test
 	public void obtenerPropiedad() {
-		//Arrange
+		// Arrange
 		String nombrePropiedad = PropiedadesParqueadero.CANTCARROSPERMITIDOS.getNombrePropiedad();
-		//Act
+		// Act
 		String carros = parqueaderoService.obtenerValorPropiedad(nombrePropiedad);
-		//
+		// Assert
 		Assert.assertEquals("20", carros);
 	}
-	
+
 	@Test
-	public void getPropiedades() {
-		List<Propiedades> list = propiedadesRepositorio.findAll();
-		Propiedades prop = list.get(0);
+	public void validarVehiculoNoPermitido() {
+		// Arrange
+		Vehiculo vehiculo = new VehiculoTestVehiculoNoPermitBuild().build();
+		// Act
+		boolean isPermitido = vigilanteService.validarDisponibilidadVehiculo(vehiculo);
+		// Assert
+		Assert.assertFalse(isPermitido);
+	}
+
+	@Test
+	public void registrarIngresBds() {
+		// Arrange
+		Vehiculo vehiculo = new VehiculoTestPlacaPermitidaBuild().build();
+		// Act
+		TiqueteParqueo tiquete = vigilanteService.registrar(vehiculo);
+		// Assert
+		Assert.assertNotNull(tiquete);
+	}
+
+	@Test
+	public void registrarIngresoVehiculo() {
+		// Arrange
+		Vehiculo vehiculo = new VehiculoTestPlacaPermitidaBuild().build();
+		Calendar calendar = Calendar.getInstance();
+		// Act
+		TiqueteParqueo tiquete = vigilanteService.registrarIngreso(vehiculo, calendar);
+		// Assert
+		Assert.assertNotNull(tiquete);
 	}
 
 }
