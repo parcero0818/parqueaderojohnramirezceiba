@@ -48,10 +48,8 @@ public class VigilanteService implements IVigilanteService {
 			if (!parqueaderoService.verificarDisponibilidadCarro(tiqueteParqueoRepositorio)) {
 				throw new DisponibilidadExcepcion("No hay cupo en el parqueadero para el tipo de vehiculo");
 			}
-		} else if (isMoto(vehiculo)) {
-			if (parqueaderoService.verificarDisponibilidadMoto(tiqueteParqueoRepositorio)) {
-				throw new DisponibilidadExcepcion("No hay cupo en el parqueadero para el tipo de vehiculo");
-			}
+		} else if (isMoto(vehiculo) && !parqueaderoService.verificarDisponibilidadMoto(tiqueteParqueoRepositorio)) {
+			throw new DisponibilidadExcepcion("No hay cupo en el parqueadero para el tipo de vehiculo");
 		}
 		return true;
 	}
@@ -63,14 +61,15 @@ public class VigilanteService implements IVigilanteService {
 	}
 
 	public boolean isCarro(Vehiculo vehiculo) {
-		if (vehiculo.getTipoVehiculo().equalsIgnoreCase(TipoVehiculoEnum.VehiculoCarro.getTipoVehiculo())) {
+		if (vehiculo.getTipoVehiculo().equalsIgnoreCase(TipoVehiculoEnum.CARRO.getTipoVehiculo())) {
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	public boolean isMoto(Vehiculo vehiculo) {
-		if (vehiculo.getTipoVehiculo().equalsIgnoreCase(TipoVehiculoEnum.VehiculoMoto.getTipoVehiculo())) {
+		if (vehiculo.getTipoVehiculo().equalsIgnoreCase(TipoVehiculoEnum.MOTO.getTipoVehiculo())) {
 			return true;
 		}
 		return false;
@@ -80,17 +79,19 @@ public class VigilanteService implements IVigilanteService {
 		if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
 				|| calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	public boolean verificarPlaca(String placa) {
-		String placasBd = propiedadesRepositorio.obtenerValorPropiedad(PropiedadesParqueadero.PlacasPermitidas.getNombrePropiedad());
+		String placasBd = propiedadesRepositorio.obtenerValorPropiedad(PropiedadesParqueadero.PLACASPERMITIDAS.getNombrePropiedad());
 		String[] placas = placasBd.toLowerCase().split(",");
 		if (!Arrays.asList(placas).contains(placa.toLowerCase().substring(0, 1))) {
 			return false;
 		}
 		return true;
+		
 	}
 
 }
