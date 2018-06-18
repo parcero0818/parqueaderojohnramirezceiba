@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.enums.PropiedadesParqueadero;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.DisponibilidadExcepcion;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Propiedades;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Vehiculo;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.repositorio.PropiedadesRepositorio;
@@ -59,9 +60,13 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		TiqueteParqueoRepositorio tiqueteParqueoRepositorio = mock(TiqueteParqueoRepositorio.class);
 		when(tiqueteParqueoRepositorio.cantidadCarrosParqueados()).thenReturn(20);
 		// Act
-		boolean disponible = parqueaderoService.verificarDisponibilidadCarro(tiqueteParqueoRepositorio);
-		// Assert
-		Assert.assertFalse(disponible);
+		try {
+		parqueaderoService.verificarDisponibilidadCarro(tiqueteParqueoRepositorio);
+		
+		}catch(DisponibilidadExcepcion e) {
+			// Assert
+			Assert.assertEquals("No hay cupo", e.getMessage());
+		}
 	}
 
 	@Test
@@ -81,9 +86,13 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		TiqueteParqueoRepositorio tiqueteParqueoRepositorio = mock(TiqueteParqueoRepositorio.class);
 		when(tiqueteParqueoRepositorio.cantidadMotosParqueados()).thenReturn(10);
 		// Act
-		boolean disponible = parqueaderoService.verificarDisponibilidadMoto(tiqueteParqueoRepositorio);
-		// Assert
-		Assert.assertFalse(disponible);
+		try {
+			parqueaderoService.verificarDisponibilidadMoto(tiqueteParqueoRepositorio);
+		}catch (DisponibilidadExcepcion e) {
+			// TODO: handle exception
+			// Assert
+			Assert.assertEquals("No hay cupo", e.getMessage());
+		}
 	}
 	
 	@Test
@@ -93,7 +102,7 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		//Act
 		boolean validarPlaca = vigilanteService.verificarPlaca(vehiculo.getPlaca());
 		//Assert
-		Assert.assertTrue(validarPlaca);
+		Assert.assertFalse(validarPlaca);
 	}
 	
 	@Test
