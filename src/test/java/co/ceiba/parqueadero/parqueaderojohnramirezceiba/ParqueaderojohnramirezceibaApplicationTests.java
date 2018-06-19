@@ -221,7 +221,7 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		// Act
 		TiqueteParqueo tiquete = vigilanteServiceMock.registrarIngreso(vehiculo, calendar);
 		// Assert
-		Assert.assertEquals(tiquete, null);
+		Assert.assertEquals(null, tiquete);
 	}
 
 }
