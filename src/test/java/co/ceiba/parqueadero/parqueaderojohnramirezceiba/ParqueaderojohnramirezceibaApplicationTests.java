@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoMotoTestPlacaPermitidaBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestPlacaPermitidaBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestVehiculoNoPermitBuild;
@@ -167,6 +168,16 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		boolean isPermitido = vigilanteService.validarDisponibilidadVehiculo(vehiculo);
 		// Assert
 		Assert.assertFalse(isPermitido);
+	}
+	
+	@Test
+	public void validarVehiculoMoto() {
+		// Arrange
+		Vehiculo vehiculo = new VehiculoMotoTestPlacaPermitidaBuild().build();
+		// Act
+		boolean isPermitido = vigilanteService.validarDisponibilidadVehiculo(vehiculo);
+		// Assert
+		Assert.assertTrue(isPermitido);
 	}
 
 	@Test
