@@ -11,7 +11,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoMotoTestPlacaPermitidaBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestBuild;
@@ -23,8 +29,11 @@ import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.TiqueteParqueo;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Vehiculo;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.repositorio.PropiedadesRepositorio;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.repositorio.TiqueteParqueoRepositorio;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.rest.ParqueaderoRest;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.service.ParqueaderoService;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.service.VigilanteService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,6 +44,9 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 	ParqueaderoService parqueaderoService;
 	@Autowired
 	PropiedadesRepositorio propiedadesRepositorio;
+
+	@Autowired
+	ParqueaderoRest parqueaderoRest;
 
 	@Before
 	public void setup() {
@@ -222,6 +234,15 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		TiqueteParqueo tiquete = vigilanteServiceMock.registrarIngreso(vehiculo, calendar);
 		// Assert
 		Assert.assertEquals(null, tiquete);
+	}
+
+	@Test
+	public void registrarVehiculoRest() {
+		//Arrange
+		Vehiculo vehiculo = new VehiculoTestPlacaPermitidaBuild().build();
+		ResponseEntity<HttpStatus> httpResponse = parqueaderoRest.registrarIngresoVehiculo(vehiculo);
+
+        Assert.assertEquals(HttpStatus.OK, httpResponse.getStatusCode());
 	}
 
 }
