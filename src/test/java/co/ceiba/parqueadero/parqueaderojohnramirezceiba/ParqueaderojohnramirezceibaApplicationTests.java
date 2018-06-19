@@ -4,7 +4,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,16 +23,16 @@ import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.TiqueteParqueo;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Vehiculo;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.repositorio.PropiedadesRepositorio;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.repositorio.TiqueteParqueoRepositorio;
-import co.ceiba.parqueadero.parqueaderojohnramirezceiba.service.IParqueaderoService;
-import co.ceiba.parqueadero.parqueaderojohnramirezceiba.service.IVigilanteService;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.service.ParqueaderoService;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.service.VigilanteService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ParqueaderojohnramirezceibaApplicationTests {
 	@Autowired
-	IVigilanteService vigilanteService;
+	VigilanteService vigilanteService;
 	@Autowired
-	IParqueaderoService parqueaderoService;
+	ParqueaderoService parqueaderoService;
 	@Autowired
 	PropiedadesRepositorio propiedadesRepositorio;
 
