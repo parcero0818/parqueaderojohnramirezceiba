@@ -168,7 +168,7 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		// Assert
 		Assert.assertFalse(isPermitido);
 	}
-	
+
 	@Test
 	public void validarVehiculoMoto() {
 		// Arrange
@@ -198,6 +198,30 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		TiqueteParqueo tiquete = vigilanteService.registrarIngreso(vehiculo, calendar);
 		// Assert
 		Assert.assertNotNull(tiquete);
+	}
+
+	@Test
+	public void registrarIngresoVehiculoMoto() {
+		// Arrange
+		Vehiculo vehiculo = new VehiculoMotoTestPlacaPermitidaBuild().build();
+		Calendar calendar = Calendar.getInstance();
+		// Act
+		TiqueteParqueo tiquete = vigilanteService.registrarIngreso(vehiculo, calendar);
+		// Assert
+		Assert.assertNotNull(tiquete);
+	}
+
+	@Test
+	public void registrarVehiculoNoDisponible() {
+		// Arrange
+		Vehiculo vehiculo = new VehiculoMotoTestPlacaPermitidaBuild().build();
+		Calendar calendar = Calendar.getInstance();
+		VigilanteService vigilanteServiceMock = mock(VigilanteService.class);
+		when(vigilanteServiceMock.validarDisponibilidadVehiculo(vehiculo)).thenReturn(false);
+		// Act
+		TiqueteParqueo tiquete = vigilanteServiceMock.registrarIngreso(vehiculo, calendar);
+		// Assert
+		Assert.assertEquals(tiquete, null);
 	}
 
 }
