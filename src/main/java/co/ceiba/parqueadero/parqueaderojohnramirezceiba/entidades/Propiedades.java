@@ -18,24 +18,12 @@ public class Propiedades {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public String getNombrePropiedad() {
 		return nombrePropiedad;
 	}
 
-	public void setNombrePropiedad(String nombrePropiedad) {
-		this.nombrePropiedad = nombrePropiedad;
-	}
-
 	public String getValorPropiedad() {
 		return valorPropiedad;
-	}
-
-	public void setValorPropiedad(String valorPropiedad) {
-		this.valorPropiedad = valorPropiedad;
 	}
 
 }

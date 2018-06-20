@@ -39,52 +39,32 @@ public class TiqueteParqueo {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public String getPlacaVehiculo() {
 		return placaVehiculo;
-	}
-
-	public void setPlacaVehiculo(String placaVehiculo) {
-		this.placaVehiculo = placaVehiculo;
 	}
 
 	public String getTipoVehiculo() {
 		return tipoVehiculo;
 	}
 
-	public void setTipoVehiculo(String tipoVehiculo) {
-		this.tipoVehiculo = tipoVehiculo;
-	}
-
 	public int getCilindrajeVehiculo() {
 		return cilindrajeVehiculo;
-	}
-
-	public void setCilindrajeVehiculo(int cilindrajeVehiculo) {
-		this.cilindrajeVehiculo = cilindrajeVehiculo;
 	}
 
 	public Date getFechaEntrada() {
 		return fechaEntrada;
 	}
 
-	public void setFechaEntrada(Date fechaEntrada) {
-		this.fechaEntrada = fechaEntrada;
-	}
-
 	public Date getFechaSalida() {
 		return fechaSalida;
 	}
 
-	public void setFechaSalida(Date fechaSalida) {
-		this.fechaSalida = fechaSalida;
-	}
-
 	public int getCostoParqueo() {
 		return costoParqueo;
+	}
+
+	public void setFechaSalida(Date fechaSalida) {
+		this.fechaSalida = fechaSalida;
 	}
 
 	public void setCostoParqueo(int costoParqueo) {

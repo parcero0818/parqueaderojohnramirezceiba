@@ -20,24 +20,12 @@ public class Vehiculo {
 		return placa;
 	}
 
-	public void setPlaca(String placa) {
-		this.placa = placa;
-	}
-
 	public int getCilindraje() {
 		return cilindraje;
 	}
 
-	public void setCilindraje(int cilindraje) {
-		this.cilindraje = cilindraje;
-	}
-
 	public String getTipoVehiculo() {
 		return tipoVehiculo;
-	}
-
-	public void setTipoVehiculo(String tipoVehiculo) {
-		this.tipoVehiculo = tipoVehiculo;
 	}
 
 }
