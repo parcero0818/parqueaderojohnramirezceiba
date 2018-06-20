@@ -8,7 +8,11 @@ public enum PropiedadesParqueadero {
 	COSTODIAMOTO("valorDiaMoto"),
 	CANTCARROSPERMITIDOS("cantidadCarros"),
 	CANTMOTOSPERMITIDOS("cantidadMotos"),
-	PLACASPERMITIDAS("placas");
+	PLACASPERMITIDAS("placas"),
+	HORASMINDIA("horasMinDia"),
+	HORASMAXDIA("horasMaxDia"),
+	COSTOADICIONALCILINDRAJE("costoAdicionalCilindraje"),
+	CILINDRAJECOSTOADICIONAL("cilindrajeCostoAdicional");
 
 	private String nombrePropiedad;
 

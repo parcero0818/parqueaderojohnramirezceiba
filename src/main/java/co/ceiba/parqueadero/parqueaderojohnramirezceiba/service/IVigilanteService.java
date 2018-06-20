@@ -9,12 +9,6 @@ public interface IVigilanteService {
 
 	public TiqueteParqueo registrarIngreso(Vehiculo vehiculo, Calendar calendar);
 
-	public boolean verificarDiaSemana(Calendar calendar);
-
-	public boolean verificarPlaca(String placa);
-
-	public boolean validarDisponibilidadVehiculo(Vehiculo vehiculo);
-
-	public TiqueteParqueo registrar(Vehiculo vehiculo);
+	public double calcularValorParqueadero(String placaVehiculo);
 
 }

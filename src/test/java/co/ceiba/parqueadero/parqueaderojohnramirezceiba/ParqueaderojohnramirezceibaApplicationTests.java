@@ -3,7 +3,10 @@ package co.ceiba.parqueadero.parqueaderojohnramirezceiba;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -238,11 +241,11 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 
 	@Test
 	public void registrarVehiculoRest() {
-		//Arrange
+		// Arrange
 		Vehiculo vehiculo = new VehiculoTestPlacaPermitidaBuild().build();
 		ResponseEntity<HttpStatus> httpResponse = parqueaderoRest.registrarIngresoVehiculo(vehiculo);
 
-        Assert.assertEquals(HttpStatus.OK, httpResponse.getStatusCode());
+		Assert.assertEquals(HttpStatus.OK, httpResponse.getStatusCode());
 	}
 
 }

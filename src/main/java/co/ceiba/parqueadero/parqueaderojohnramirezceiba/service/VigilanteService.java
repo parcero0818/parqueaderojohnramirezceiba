@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.enums.PropiedadesParqueadero;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.enums.TipoVehiculoEnum;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.AutorizacionExcepcion;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.DisponibilidadExcepcion;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.TiqueteParqueo;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Vehiculo;
@@ -28,15 +29,27 @@ public class VigilanteService implements IVigilanteService {
 	public TiqueteParqueo registrarIngreso(Vehiculo vehiculo, Calendar calendar) {
 		try {
 			if ((validarDisponibilidadVehiculo(vehiculo) && !verificarPlaca(vehiculo.getPlaca()))
-					|| (validarDisponibilidadVehiculo(vehiculo)
-							&& (verificarPlaca(vehiculo.getPlaca()) && verificarDiaSemana(calendar)))) {
+					|| ingresoPlacaDiasNoAutorizados(vehiculo, calendar)) {
 				return registrar(vehiculo);
 			}
 		} catch (DisponibilidadExcepcion e) {
 			throw new DisponibilidadExcepcion("No hay cupo");
+		} catch (AutorizacionExcepcion e) {
+			throw new AutorizacionExcepcion("No esta autorizado para ingresar");
 		}
 		return null;
 
+	}
+
+	public boolean ingresoPlacaDiasNoAutorizados(Vehiculo vehiculo, Calendar calendar) {
+		if ((validarDisponibilidadVehiculo(vehiculo)
+				&& (verificarPlaca(vehiculo.getPlaca()) && verificarDiaSemana(calendar)))) {
+			return true;
+		} else if (validarDisponibilidadVehiculo(vehiculo)
+				&& !(verificarPlaca(vehiculo.getPlaca()) && verificarDiaSemana(calendar))) {
+			throw new AutorizacionExcepcion("");
+		}
+		return false;
 	}
 
 	/**
@@ -47,10 +60,12 @@ public class VigilanteService implements IVigilanteService {
 	 * @return
 	 */
 	public boolean validarDisponibilidadVehiculo(Vehiculo vehiculo) {
-		if ((isCarro(vehiculo) && !parqueaderoService.verificarDisponibilidadCarro(tiqueteParqueoRepositorio))
-				|| (isMoto(vehiculo) && !parqueaderoService.verificarDisponibilidadMoto(tiqueteParqueoRepositorio))) {
+		if ((isCarro(vehiculo.getTipoVehiculo())
+				&& !parqueaderoService.verificarDisponibilidadCarro(tiqueteParqueoRepositorio))
+				|| (isMoto(vehiculo.getTipoVehiculo())
+						&& !parqueaderoService.verificarDisponibilidadMoto(tiqueteParqueoRepositorio))) {
 			throw new DisponibilidadExcepcion("No hay cupo en el parqueadero para el tipo de vehiculo");
-		}else if(!isCarro(vehiculo)  && !isMoto(vehiculo)) {
+		} else if (!isCarro(vehiculo.getTipoVehiculo()) && !isMoto(vehiculo.getTipoVehiculo())) {
 			return false;
 		}
 		return true;
@@ -75,8 +90,8 @@ public class VigilanteService implements IVigilanteService {
 	 * @param vehiculo
 	 * @return
 	 */
-	public boolean isCarro(Vehiculo vehiculo) {
-		return vehiculo.getTipoVehiculo().equalsIgnoreCase(TipoVehiculoEnum.CARRO.getTipoVehiculo());
+	public boolean isCarro(String tipoVehiculo) {
+		return tipoVehiculo.equalsIgnoreCase(TipoVehiculoEnum.CARRO.getTipoVehiculo());
 	}
 
 	/**
@@ -85,8 +100,8 @@ public class VigilanteService implements IVigilanteService {
 	 * @param vehiculo
 	 * @return
 	 */
-	public boolean isMoto(Vehiculo vehiculo) {
-		return vehiculo.getTipoVehiculo().equalsIgnoreCase(TipoVehiculoEnum.MOTO.getTipoVehiculo());
+	public boolean isMoto(String tipoVehiculo) {
+		return tipoVehiculo.equalsIgnoreCase(TipoVehiculoEnum.MOTO.getTipoVehiculo());
 	}
 
 	/**
@@ -106,6 +121,82 @@ public class VigilanteService implements IVigilanteService {
 				.obtenerValorPropiedad(PropiedadesParqueadero.PLACASPERMITIDAS.getNombrePropiedad());
 		String[] placas = placasBd.toLowerCase().split(",");
 		return Arrays.asList(placas).contains(placa.toLowerCase().substring(0, 1));
+	}
+
+	public double calcularValorParqueadero(String placaVehiculo) {
+		TiqueteParqueo tiquete = tiqueteParqueoRepositorio.obtenerVehiculoPorPlaca(placaVehiculo);
+		if (null != tiquete) {
+			double costoHoraMoto = Double.parseDouble(propiedadesRepositorio
+					.obtenerValorPropiedad(PropiedadesParqueadero.COSTOHORAMOTO.getNombrePropiedad()));
+			double costoHoraCarro = Double.parseDouble(propiedadesRepositorio
+					.obtenerValorPropiedad(PropiedadesParqueadero.COSTOHORACARRO.getNombrePropiedad()));
+			double costoDiaMoto = Double.parseDouble(propiedadesRepositorio
+					.obtenerValorPropiedad(PropiedadesParqueadero.COSTODIAMOTO.getNombrePropiedad()));
+			double costoDiaCarro = Double.parseDouble(propiedadesRepositorio
+					.obtenerValorPropiedad(PropiedadesParqueadero.COSTODIACARRO.getNombrePropiedad()));
+			int horaMinDia = Integer.parseInt(propiedadesRepositorio
+					.obtenerValorPropiedad(PropiedadesParqueadero.HORASMINDIA.getNombrePropiedad()));
+			int horaMaxDia = Integer.parseInt(propiedadesRepositorio
+					.obtenerValorPropiedad(PropiedadesParqueadero.HORASMAXDIA.getNombrePropiedad()));
+			int minutosParqueadero = (int) ((new Date().getTime() - tiquete.getFechaEntrada().getTime()) / 1000);
+			int horasParqueadero = minutosParqueadero / 3600;
+			double costoParqueadero = 0;
+			if (horasParqueadero < horaMinDia) {
+				if (isCarro(tiquete.getTipoVehiculo())) {
+					costoParqueadero = horasParqueadero * costoHoraCarro;
+					return costoParqueadero;
+				} else if (isMoto(tiquete.getTipoVehiculo())) {
+					costoParqueadero = horasParqueadero * costoHoraMoto;
+					return costoParqueadero + obtenerCostoAdCilindraje(tiquete);
+				}
+			} else if (horasParqueadero <= horaMaxDia) {
+				if (isCarro(tiquete.getTipoVehiculo())) {
+					costoParqueadero = horasParqueadero * costoDiaCarro;
+					return costoParqueadero;
+				} else if (isMoto(tiquete.getTipoVehiculo())) {
+					costoParqueadero = horasParqueadero * costoDiaMoto;
+					return costoParqueadero + obtenerCostoAdCilindraje(tiquete);
+				}
+			} else {
+				return calculoCostoEnDias(horasParqueadero, tiquete, costoHoraCarro, costoDiaCarro, costoHoraMoto,
+						costoDiaMoto);
+			}
+		}
+		return 0;
+	}
+
+	public double obtenerCostoAdCilindraje(TiqueteParqueo tiquete) {
+		int cilindraje = Integer.parseInt(propiedadesRepositorio
+				.obtenerValorPropiedad(PropiedadesParqueadero.CILINDRAJECOSTOADICIONAL.getNombrePropiedad()));
+
+		if (tiquete.getCilindrajeVehiculo() > cilindraje) {
+			return Double.parseDouble(propiedadesRepositorio
+					.obtenerValorPropiedad(PropiedadesParqueadero.COSTOADICIONALCILINDRAJE.getNombrePropiedad()));
+		}
+		return 0;
+	}
+
+	public double calculoCostoEnDias(int horasParqueadero, TiqueteParqueo tiquete, double costoHoraCarro,
+			double costoDiaCarro, double costoHoraMoto, double costoDiaMoto) {
+		int dias = horasParqueadero / 24;
+		int horas = horasParqueadero % 24;
+		double costoHoras = 0;
+		double costoParqueadero = 0;
+		if (isCarro(tiquete.getTipoVehiculo())) {
+			if (horas > 0) {
+				costoHoras = horas * costoHoraCarro;
+			}
+			costoParqueadero = (dias * costoDiaCarro) + costoHoras;
+			return costoParqueadero;
+		} else if (isMoto(tiquete.getTipoVehiculo())) {
+			if (horas > 0) {
+				costoHoras = horas * costoHoraMoto;
+			}
+			costoParqueadero = (dias * costoDiaMoto) + costoHoras;
+			return costoParqueadero + obtenerCostoAdCilindraje(tiquete);
+		}
+
+		return costoParqueadero;
 	}
 
 }
