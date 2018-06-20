@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,7 @@ public class ParqueaderoRest {
 	@Autowired
 	PropiedadesRepositorio propiedadesRepositorio;
 
+	@CrossOrigin
 	@PostMapping(value = "/registrarIngreso")
 	public ResponseEntity<HttpStatus> registrarIngresoVehiculo(@RequestBody Vehiculo vehiculo) {
 		try {
@@ -49,11 +51,13 @@ public class ParqueaderoRest {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	@CrossOrigin
 	@GetMapping(value = "/registrarSalida")
 	public int registrarSalidaVehiculo(@RequestParam("placaVehiculo") String placaVehiculo) {
 		return vigilanteService.calcularValorParqueadero(placaVehiculo);
 	}
 
+	@CrossOrigin
 	@GetMapping(value = "/vehiculosParqueados")
 	public List<Tiquete> vehiculosParqueados() {
 		return vigilanteService.vehiculosParqueados();
