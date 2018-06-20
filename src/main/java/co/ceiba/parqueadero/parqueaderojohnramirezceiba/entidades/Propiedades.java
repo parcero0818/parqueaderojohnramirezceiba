@@ -1,4 +1,4 @@
-package co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo;
+package co.ceiba.parqueadero.parqueaderojohnramirezceiba.entidades;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

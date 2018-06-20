@@ -1,9 +1,11 @@
 package co.ceiba.parqueadero.parqueaderojohnramirezceiba.repositorio;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.TiqueteParqueo;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.entidades.TiqueteParqueo;
 
 public interface TiqueteParqueoRepositorio extends JpaRepository<TiqueteParqueo, Long> {
 
@@ -15,5 +17,8 @@ public interface TiqueteParqueoRepositorio extends JpaRepository<TiqueteParqueo,
 
 	@Query("select t from tiqueteParqueo t where lower(t.placaVehiculo)=lower(?1)")
 	TiqueteParqueo obtenerVehiculoPorPlaca(String placaVehiculo);
+	
+	@Query("select t from tiqueteParqueo t where t.fechaSalida is null")
+	List<TiqueteParqueo> vehiculosParqueados();
 
 }
