@@ -15,4 +15,30 @@ public class Tiquete {
 		this.fechaEntrada = fechaEntrada;
 	}
 
+	public String getPlacaVehiculo() {
+		return placaVehiculo;
+	}
+
+	public void setPlacaVehiculo(String placaVehiculo) {
+		this.placaVehiculo = placaVehiculo;
+	}
+
+	public String getTipoVehiculo() {
+		return tipoVehiculo;
+	}
+
+	public void setTipoVehiculo(String tipoVehiculo) {
+		this.tipoVehiculo = tipoVehiculo;
+	}
+
+	public Date getFechaEntrada() {
+		return fechaEntrada;
+	}
+
+	public void setFechaEntrada(Date fechaEntrada) {
+		this.fechaEntrada = fechaEntrada;
+	}
+	
+	
+
 }

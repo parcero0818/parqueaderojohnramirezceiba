@@ -9,6 +9,6 @@ public interface IVigilanteService {
 
 	public TiqueteParqueo registrarIngreso(Vehiculo vehiculo, Calendar calendar);
 
-	public TiqueteParqueo calcularValorParqueadero(String placaVehiculo);
+	public TiqueteParqueo calcularValorParqueadero(TiqueteParqueo tiquete);
 
 }

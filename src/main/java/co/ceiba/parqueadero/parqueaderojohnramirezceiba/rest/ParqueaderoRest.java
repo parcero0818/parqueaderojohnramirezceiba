@@ -54,7 +54,12 @@ public class ParqueaderoRest {
 	@CrossOrigin
 	@GetMapping(value = "/registrarSalida")
 	public TiqueteParqueo registrarSalidaVehiculo(@RequestParam("placaVehiculo") String placaVehiculo) {
-		return vigilanteService.calcularValorParqueadero(placaVehiculo);
+		TiqueteParqueo tiquete = vigilanteService.obtenerVehiculoPorPlaca(placaVehiculo);
+		if(tiquete != null) {
+			return vigilanteService.calcularValorParqueadero(tiquete);
+		}
+		return null;
+		
 	}
 
 	@CrossOrigin

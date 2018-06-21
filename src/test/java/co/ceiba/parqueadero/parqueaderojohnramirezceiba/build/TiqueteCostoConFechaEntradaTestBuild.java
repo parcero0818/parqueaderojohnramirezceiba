@@ -19,7 +19,7 @@ public class TiqueteCostoConFechaEntradaTestBuild {
 		this.placaVehiculo = "PZV-283";
 		this.tipoVehiculo = "carro";
 		this.cilindrajeVehiculo = 200;
-		DateFormat formatoFecha = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		DateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String fecha = "2018-06-21 13:35:51";
 		this.fechaEntrada = formatoFecha.parse(fecha);
 	}

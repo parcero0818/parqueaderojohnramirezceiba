@@ -3,6 +3,7 @@ package co.ceiba.parqueadero.parqueaderojohnramirezceiba;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -12,13 +13,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.TiqueteCostoConFechaEntradaTestBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.TiqueteCostoParqueaderoTestBuild;
-import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoMotoTestPlacaPermitidaBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestPlacaPermitidaBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestVehiculoNoPermitBuild;
@@ -179,15 +177,12 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		Assert.assertFalse(isPermitido);
 	}
 
-	/*@Test
-	public void validarVehiculoMoto() {
-		// Arrange
-		Vehiculo vehiculo = new VehiculoMotoTestPlacaPermitidaBuild().build();
-		// Act
-		boolean isPermitido = vigilanteService.validarDisponibilidadVehiculo(vehiculo);
-		// Assert
-		Assert.assertTrue(isPermitido);
-	}*/
+	/*
+	 * @Test public void validarVehiculoMoto() { // Arrange Vehiculo vehiculo = new
+	 * VehiculoMotoTestPlacaPermitidaBuild().build(); // Act boolean isPermitido =
+	 * vigilanteService.validarDisponibilidadVehiculo(vehiculo); // Assert
+	 * Assert.assertTrue(isPermitido); }
+	 */
 
 	@Test
 	public void registrarIngresBds() {
@@ -199,52 +194,39 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		Assert.assertNotNull(tiquete);
 	}
 
-	/*@Test
-	public void registrarIngresoVehiculo() {
-		// Arrange
-		Vehiculo vehiculo = new VehiculoTestPlacaPermitidaBuild().build();
-		Calendar calendar = Calendar.getInstance();
-		// Act
-		TiqueteParqueo tiquete = vigilanteService.registrarIngreso(vehiculo, calendar);
-		// Assert
-		Assert.assertNotNull(tiquete);
-	}
-
-	@Test
-	public void registrarIngresoVehiculoMoto() {
-		// Arrange
-		Vehiculo vehiculo = new VehiculoMotoTestPlacaPermitidaBuild().build();
-		Calendar calendar = Calendar.getInstance();
-		VigilanteService vigilanteServiceMock = mock(VigilanteService.class);
-		when(vigilanteServiceMock.validarDisponibilidadVehiculo(vehiculo)).thenReturn(true);
-		
-		// Act
-		TiqueteParqueo tiquete = vigilanteServiceMock.registrarIngreso(vehiculo, calendar);
-		// Assert
-		Assert.assertNotNull(tiquete);
-	}
-
-	@Test
-	public void registrarVehiculoNoDisponible() {
-		// Arrange
-		Vehiculo vehiculo = new VehiculoMotoTestPlacaPermitidaBuild().build();
-		Calendar calendar = Calendar.getInstance();
-		VigilanteService vigilanteServiceMock = mock(VigilanteService.class);
-		when(vigilanteServiceMock.validarDisponibilidadVehiculo(vehiculo)).thenReturn(false);
-		// Act
-		TiqueteParqueo tiquete = vigilanteServiceMock.registrarIngreso(vehiculo, calendar);
-		// Assert
-		Assert.assertEquals(null, tiquete);
-	}
-
-	@Test
-	public void registrarVehiculoRest() {
-		// Arrange
-		Vehiculo vehiculo = new VehiculoTestPlacaPermitidaBuild().build();
-		ResponseEntity<HttpStatus> httpResponse = parqueaderoRest.registrarIngresoVehiculo(vehiculo);
-
-		Assert.assertEquals(HttpStatus.OK, httpResponse.getStatusCode());
-	}*/
+	/*
+	 * @Test public void registrarIngresoVehiculo() { // Arrange Vehiculo vehiculo =
+	 * new VehiculoTestPlacaPermitidaBuild().build(); Calendar calendar =
+	 * Calendar.getInstance(); // Act TiqueteParqueo tiquete =
+	 * vigilanteService.registrarIngreso(vehiculo, calendar); // Assert
+	 * Assert.assertNotNull(tiquete); }
+	 * 
+	 * @Test public void registrarIngresoVehiculoMoto() { // Arrange Vehiculo
+	 * vehiculo = new VehiculoMotoTestPlacaPermitidaBuild().build(); Calendar
+	 * calendar = Calendar.getInstance(); VigilanteService vigilanteServiceMock =
+	 * mock(VigilanteService.class);
+	 * when(vigilanteServiceMock.validarDisponibilidadVehiculo(vehiculo)).thenReturn
+	 * (true);
+	 * 
+	 * // Act TiqueteParqueo tiquete =
+	 * vigilanteServiceMock.registrarIngreso(vehiculo, calendar); // Assert
+	 * Assert.assertNotNull(tiquete); }
+	 * 
+	 * @Test public void registrarVehiculoNoDisponible() { // Arrange Vehiculo
+	 * vehiculo = new VehiculoMotoTestPlacaPermitidaBuild().build(); Calendar
+	 * calendar = Calendar.getInstance(); VigilanteService vigilanteServiceMock =
+	 * mock(VigilanteService.class);
+	 * when(vigilanteServiceMock.validarDisponibilidadVehiculo(vehiculo)).thenReturn
+	 * (false); // Act TiqueteParqueo tiquete =
+	 * vigilanteServiceMock.registrarIngreso(vehiculo, calendar); // Assert
+	 * Assert.assertEquals(null, tiquete); }
+	 * 
+	 * @Test public void registrarVehiculoRest() { // Arrange Vehiculo vehiculo =
+	 * new VehiculoTestPlacaPermitidaBuild().build(); ResponseEntity<HttpStatus>
+	 * httpResponse = parqueaderoRest.registrarIngresoVehiculo(vehiculo);
+	 * 
+	 * Assert.assertEquals(HttpStatus.OK, httpResponse.getStatusCode()); }
+	 */
 
 	// CALCULO COSTO PARQUEADERO
 	@Test
@@ -353,7 +335,7 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		// Assert
 		Assert.assertEquals(5000, costoParqueo);
 	}
-	
+
 	@Test
 	public void costoParqueoDiasCarro() {
 		// Arragne
@@ -370,7 +352,7 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		// Assert
 		Assert.assertEquals(10000, costoParqueo);
 	}
-	
+
 	@Test
 	public void costoParqueoDiasMotoHoras() {
 		// Arragne
@@ -387,7 +369,7 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		// Assert
 		Assert.assertEquals(8000, costoParqueo);
 	}
-	
+
 	@Test
 	public void costoParqueoDiasCarroHoras() {
 		// Arragne
@@ -403,17 +385,42 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		// Assert
 		Assert.assertEquals(16000, costoParqueo);
 	}
-	
+
 	@Test
-	public void costoParqueadero() {
-		// Arragne
-		Vehiculo vehiculo = new VehiculoTestPlacaPermitidaBuild().build();
-		vehiculo.setPlaca("XXL-456");
-		vigilanteService.registrar(vehiculo);
+	public void costoParqueaderoMenosUnaHoraCarro() {
+		// Arrange
+		TiqueteParqueo tiquete = new TiqueteCostoParqueaderoTestBuild().build();
+		int costoHoraCarro = 1000;
+		int costoHoraMoto = 500;
 		// Act
-		TiqueteParqueo tiqueteCosto = vigilanteService.calcularValorParqueadero(vehiculo.getPlaca());
+		int costoParqueadero = vigilanteService.costoMenorUnaHora(tiquete, costoHoraCarro, costoHoraMoto);
 		// Assert
-		Assert.assertNotNull(tiqueteCosto);
+		Assert.assertEquals(1000, costoParqueadero);
+	}
+
+	@Test
+	public void costoParqueaderoMenosUnaHoraMotod() {
+		// Arrange
+		TiqueteParqueo tiquete = new TiqueteCostoParqueaderoTestBuild().build();
+		tiquete.setTipoVehiculo("moto");
+		int costoHoraCarro = 1000;
+		int costoHoraMoto = 500;
+		// Act
+		int costoParqueadero = vigilanteService.costoMenorUnaHora(tiquete, costoHoraCarro, costoHoraMoto);
+
+		// Assert
+		Assert.assertEquals(500, costoParqueadero);
+	}
+
+	@Test
+	public void costoParqueadero() throws ParseException {
+		// Arragne
+		TiqueteParqueo tiquete = new TiqueteCostoConFechaEntradaTestBuild().build();
+
+		// Act
+		TiqueteParqueo tiqueteCosto = vigilanteService.calcularValorParqueadero(tiquete);
+		// Assert
+		Assert.assertEquals(tiquete.getPlacaVehiculo(), tiqueteCosto.getPlacaVehiculo());
 	}
 
 	@Test
@@ -424,6 +431,20 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		List<Tiquete> tiquetes = vigilanteService.vehiculosParqueados();
 		// Assert
 		Assert.assertNotNull(tiquetes);
+	}
+
+	@Test
+	public void vehiculosParqueadosRest() {
+		// Arrange
+
+		// Act
+		List<Tiquete> tiquetes = parqueaderoRest.vehiculosParqueados();
+		if (tiquetes.size() <= 0) {
+			Assert.assertNull(tiquetes);
+		} else {
+			Assert.assertNotNull(tiquetes);
+		}
+
 	}
 
 }
