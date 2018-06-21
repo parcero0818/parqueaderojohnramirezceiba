@@ -20,6 +20,10 @@ public class Vehiculo {
 		return placa;
 	}
 
+	public void setPlaca(String placa) {
+		this.placa = placa;
+	}
+
 	public int getCilindraje() {
 		return cilindraje;
 	}

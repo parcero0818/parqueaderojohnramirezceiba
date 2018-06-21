@@ -35,6 +35,14 @@ public class TiqueteParqueo {
 		this.costoParqueo = costoParqueo;
 	}
 
+	public TiqueteParqueo(String placaVehiculo, String tipoVehiculo, int cilindrajeVehiculo, Date fechaEntrada) {
+		super();
+		this.placaVehiculo = placaVehiculo;
+		this.tipoVehiculo = tipoVehiculo;
+		this.cilindrajeVehiculo = cilindrajeVehiculo;
+		this.fechaEntrada = fechaEntrada;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -61,6 +69,14 @@ public class TiqueteParqueo {
 
 	public int getCostoParqueo() {
 		return costoParqueo;
+	}
+
+	public void setTipoVehiculo(String tipoVehiculo) {
+		this.tipoVehiculo = tipoVehiculo;
+	}
+
+	public void setCilindrajeVehiculo(int cilindrajeVehiculo) {
+		this.cilindrajeVehiculo = cilindrajeVehiculo;
 	}
 
 	public void setFechaSalida(Date fechaSalida) {

@@ -15,7 +15,7 @@ public interface TiqueteParqueoRepositorio extends JpaRepository<TiqueteParqueo,
 	@Query("select count(*) from tiqueteParqueo t where lower(t.tipoVehiculo)=lower('moto') and t.fechaSalida is null")
 	Integer cantidadMotosParqueados();
 
-	@Query("select t from tiqueteParqueo t where lower(t.placaVehiculo)=lower(?1)")
+	@Query("select t from tiqueteParqueo t where t.fechaSalida is null and lower(t.placaVehiculo)=lower(?1)")
 	TiqueteParqueo obtenerVehiculoPorPlaca(String placaVehiculo);
 	
 	@Query("select t from tiqueteParqueo t where t.fechaSalida is null")
