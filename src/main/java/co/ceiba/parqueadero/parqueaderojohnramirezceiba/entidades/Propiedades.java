@@ -10,20 +10,8 @@ public class Propiedades {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private String nombrePropiedad;
-	private String valorPropiedad;
-
-	public int getId() {
-		return id;
-	}
-
-	public String getNombrePropiedad() {
-		return nombrePropiedad;
-	}
-
-	public String getValorPropiedad() {
-		return valorPropiedad;
-	}
+	int id;
+	String nombrePropiedad;
+	String valorPropiedad;
 
 }
