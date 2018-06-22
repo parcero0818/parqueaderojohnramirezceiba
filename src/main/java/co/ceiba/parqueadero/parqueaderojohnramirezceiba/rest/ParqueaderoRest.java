@@ -37,24 +37,24 @@ public class ParqueaderoRest {
 
 	@CrossOrigin
 	@PostMapping(value = "/registrarIngreso")
-	public ResponseEntity<HttpStatus> registrarIngresoVehiculo(@RequestBody Vehiculo vehiculo) {
+	public String registrarIngresoVehiculo(@RequestBody Vehiculo vehiculo) {
 		try {
 			Calendar calendar = Calendar.getInstance();
 			TiqueteParqueo tiquete = vigilanteService.registrarIngreso(vehiculo, calendar);
 			if (null != tiquete) {
-				return new ResponseEntity<>(HttpStatus.OK);
+				return "Registro Exitoso";
 			}
 
-		} catch (DisponibilidadExcepcion e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (RuntimeException e) {
+			return e.getMessage();
 		}
-		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		return HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
 	}
 
 	@CrossOrigin
 	@GetMapping(value = "/registrarSalida")
 	public TiqueteParqueo registrarSalidaVehiculo(@RequestParam("placaVehiculo") String placaVehiculo) {
-		TiqueteParqueo tiquete = vigilanteService.obtenerVehiculoPorPlaca(placaVehiculo);
+		TiqueteParqueo tiquete = vigilanteService.obtenerVehiculoPorPlacaSalida(placaVehiculo);
 		if(tiquete != null) {
 			return vigilanteService.calcularValorParqueadero(tiquete);
 		}

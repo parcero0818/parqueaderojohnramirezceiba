@@ -14,6 +14,8 @@ import co.ceiba.parqueadero.parqueaderojohnramirezceiba.enums.PropiedadesParquea
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.enums.TipoVehiculoEnum;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.AutorizacionExcepcion;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.DisponibilidadExcepcion;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.RegistroExcepcion;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.TipoVehiculoExcepcion;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Tiquete;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Vehiculo;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.repositorio.PropiedadesRepositorio;
@@ -27,32 +29,29 @@ public class VigilanteService implements IVigilanteService {
 	ParqueaderoService parqueaderoService;
 	@Autowired
 	PropiedadesRepositorio propiedadesRepositorio;
-	TiqueteParqueo tiqueteParqueo;
+
+	public VigilanteService(TiqueteParqueoRepositorio tiqueteParqueoRepositorio, ParqueaderoService parqueaderoService,
+			PropiedadesRepositorio propiedadesRepositorio) {
+		this.tiqueteParqueoRepositorio = tiqueteParqueoRepositorio;
+		this.parqueaderoService = parqueaderoService;
+		this.propiedadesRepositorio = propiedadesRepositorio;
+	}
 
 	public TiqueteParqueo registrarIngreso(Vehiculo vehiculo, Calendar calendar) {
-		try {
-			if ((validarDisponibilidadVehiculo(vehiculo) && !verificarPlaca(vehiculo.getPlaca()))
-					&& (obtenerVehiculoPorPlaca(vehiculo.getPlaca()) == null)
-					|| ingresoPlacaDiasNoAutorizados(vehiculo, calendar)
-							&& (obtenerVehiculoPorPlaca(vehiculo.getPlaca()) == null)) {
-				return registrar(vehiculo);
-			}
-		} catch (DisponibilidadExcepcion e) {
-			throw new DisponibilidadExcepcion("No hay cupo");
-		} catch (AutorizacionExcepcion e) {
-			throw new AutorizacionExcepcion("No esta autorizado para ingresar");
+		validarDisponibilidadVehiculo(vehiculo);
+		verificarPlacaRegistro(vehiculo.getPlaca());
+		if ((!verificarPlaca(vehiculo.getPlaca())) || ingresoPlacaDiasNoAutorizados(vehiculo, calendar)) {
+			return registrar(vehiculo);
 		}
 		return null;
 
 	}
 
 	public boolean ingresoPlacaDiasNoAutorizados(Vehiculo vehiculo, Calendar calendar) {
-		if ((validarDisponibilidadVehiculo(vehiculo)
-				&& (verificarPlaca(vehiculo.getPlaca()) && verificarDiaSemana(calendar)))) {
+		if ((verificarPlaca(vehiculo.getPlaca()) && verificarDiaSemana(calendar))) {
 			return true;
-		} else if (validarDisponibilidadVehiculo(vehiculo)
-				&& !(verificarPlaca(vehiculo.getPlaca()) && verificarDiaSemana(calendar))) {
-			throw new AutorizacionExcepcion("");
+		} else if (!(verificarPlaca(vehiculo.getPlaca()) && verificarDiaSemana(calendar))) {
+			throw new AutorizacionExcepcion("No esta autorizado");
 		}
 		return false;
 	}
@@ -64,16 +63,15 @@ public class VigilanteService implements IVigilanteService {
 	 * @param vehiculo
 	 * @return
 	 */
-	public boolean validarDisponibilidadVehiculo(Vehiculo vehiculo) {
+	public void validarDisponibilidadVehiculo(Vehiculo vehiculo) {
 		if ((isCarro(vehiculo.getTipoVehiculo())
 				&& !parqueaderoService.verificarDisponibilidadCarro(tiqueteParqueoRepositorio))
 				|| (isMoto(vehiculo.getTipoVehiculo())
 						&& !parqueaderoService.verificarDisponibilidadMoto(tiqueteParqueoRepositorio))) {
 			throw new DisponibilidadExcepcion("No hay cupo en el parqueadero para el tipo de vehiculo");
 		} else if (!isCarro(vehiculo.getTipoVehiculo()) && !isMoto(vehiculo.getTipoVehiculo())) {
-			return false;
+			throw new TipoVehiculoExcepcion("Tipo de vehiculo no permitido");
 		}
-		return true;
 	}
 
 	/**
@@ -83,8 +81,8 @@ public class VigilanteService implements IVigilanteService {
 	 * @return
 	 */
 	public TiqueteParqueo registrar(Vehiculo vehiculo) {
-		tiqueteParqueo = new TiqueteParqueo(vehiculo.getPlaca(), vehiculo.getTipoVehiculo(), vehiculo.getCilindraje(),
-				new Date(), null, 0);
+		TiqueteParqueo tiqueteParqueo = new TiqueteParqueo(vehiculo.getPlaca(), vehiculo.getTipoVehiculo(),
+				vehiculo.getCilindraje(), new Date(), null, 0);
 		return tiqueteParqueoRepositorio.save(tiqueteParqueo);
 	}
 
@@ -152,7 +150,7 @@ public class VigilanteService implements IVigilanteService {
 			} else if (horasParqueadero < horaMinDia) {
 				costoParqueadero = costoHorasParqueo(horasParqueadero, costoHoraCarro, costoHoraMoto, tiquete);
 			} else if (horasParqueadero <= horaMaxDia) {
-				costoUnDiaParqueo(horasParqueadero, costoDiaCarro, costoDiaMoto, tiquete);
+				costoUnDiaParqueo(costoDiaCarro, costoDiaMoto, tiquete);
 			} else {
 				costoParqueadero = calculoCostoEnDias(horasParqueadero, tiquete, costoHoraCarro, costoDiaCarro,
 						costoHoraMoto, costoDiaMoto);
@@ -161,8 +159,14 @@ public class VigilanteService implements IVigilanteService {
 		return registrarSalidaVehiculo(tiquete, costoParqueadero);
 	}
 
-	public TiqueteParqueo obtenerVehiculoPorPlaca(String placaVehiculo) {
+	public TiqueteParqueo obtenerVehiculoPorPlacaSalida(String placaVehiculo) {
 		return tiqueteParqueoRepositorio.obtenerVehiculoPorPlaca(placaVehiculo);
+	}
+
+	public void verificarPlacaRegistro(String placaVehiculo) {
+		if (null != tiqueteParqueoRepositorio.obtenerVehiculoPorPlaca(placaVehiculo)) {
+			throw new RegistroExcepcion("El carro ya se encuentra en el parqueadero");
+		}
 	}
 
 	public int costoHorasParqueo(int horasParqueadero, int costoHoraCarro, int costoHoraMoto, TiqueteParqueo tiquete) {
@@ -176,12 +180,12 @@ public class VigilanteService implements IVigilanteService {
 		return costoParqueadero;
 	}
 
-	public int costoUnDiaParqueo(int horasParqueadero, int costoDiaCarro, int costoDiaMoto, TiqueteParqueo tiquete) {
+	public int costoUnDiaParqueo(int costoDiaCarro, int costoDiaMoto, TiqueteParqueo tiquete) {
 		int costoParqueadero = 0;
 		if (isCarro(tiquete.getTipoVehiculo())) {
-			costoParqueadero = horasParqueadero * costoDiaCarro;
+			costoParqueadero = costoDiaCarro;
 		} else if (isMoto(tiquete.getTipoVehiculo())) {
-			costoParqueadero = horasParqueadero * costoDiaMoto;
+			costoParqueadero = costoDiaMoto;
 			costoParqueadero += obtenerCostoAdCilindraje(tiquete);
 		}
 		return costoParqueadero;
