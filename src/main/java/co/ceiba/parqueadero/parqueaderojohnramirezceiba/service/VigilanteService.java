@@ -150,7 +150,7 @@ public class VigilanteService implements IVigilanteService {
 			} else if (horasParqueadero < horaMinDia) {
 				costoParqueadero = costoHorasParqueo(horasParqueadero, costoHoraCarro, costoHoraMoto, tiquete);
 			} else if (horasParqueadero <= horaMaxDia) {
-				costoUnDiaParqueo(costoDiaCarro, costoDiaMoto, tiquete);
+				costoParqueadero = costoUnDiaParqueo(costoDiaCarro, costoDiaMoto, tiquete);
 			} else {
 				costoParqueadero = calculoCostoEnDias(horasParqueadero, tiquete, costoHoraCarro, costoDiaCarro,
 						costoHoraMoto, costoDiaMoto);

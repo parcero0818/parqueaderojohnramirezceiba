@@ -75,8 +75,16 @@ public class TiqueteParqueo {
 		this.fechaSalida = fechaSalida;
 	}
 
+	public void setFechaEntrada(Date fechaEntrada) {
+		this.fechaEntrada = fechaEntrada;
+	}
+
 	public void setCostoParqueo(int costoParqueo) {
 		this.costoParqueo = costoParqueo;
+	}
+
+	public int getCostoParqueo() {
+		return costoParqueo;
 	}
 
 }

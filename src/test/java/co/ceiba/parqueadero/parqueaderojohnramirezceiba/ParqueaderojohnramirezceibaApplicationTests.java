@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.TiqueteCostoConFechaEntradaTestBuild;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.TiqueteCostoConFechaEntradaActualTestBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.TiqueteCostoParqueaderoTestBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestBuild;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.build.VehiculoTestPlacaPermitidaBuild;
@@ -507,14 +507,18 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 	}
 
 	@Test
-	public void costoParqueadero() throws ParseException {
+	public void costoParqueadero() {
 		// Arragne
-		TiqueteParqueo tiquete = new TiqueteCostoConFechaEntradaTestBuild().build();
-
+		TiqueteParqueo tiquete = new TiqueteCostoConFechaEntradaActualTestBuild().build();
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(tiquete.getFechaEntrada());
+		calendar.add(Calendar.HOUR, -26);
+		tiquete.setFechaEntrada(calendar.getTime());
 		// Act
 		TiqueteParqueo tiqueteCosto = vigilanteService.calcularValorParqueadero(tiquete);
 		// Assert
-		Assert.assertEquals(tiquete.getPlacaVehiculo(), tiqueteCosto.getPlacaVehiculo());
+		Assert.assertEquals(10000, tiqueteCosto.getCostoParqueo());
 	}
 
 	@Test
@@ -654,8 +658,50 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		}
 
 	}
-	
-	
-	
+
+	@Test
+	public void costoParqueaderoUnaHora() throws ParseException {
+		// Arragne
+		int costoHoraCarro = 1000;
+		TiqueteParqueo tiquete = new TiqueteCostoConFechaEntradaActualTestBuild().build();
+
+		// Act
+		TiqueteParqueo tiqueteCosto = vigilanteService.calcularValorParqueadero(tiquete);
+		// Assert
+		Assert.assertEquals(costoHoraCarro, tiqueteCosto.getCostoParqueo());
+	}
+
+	@Test
+	public void costoParqueaderoVariasHoras() {
+		// Arragne
+		TiqueteParqueo tiquete = new TiqueteCostoConFechaEntradaActualTestBuild().build();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(tiquete.getFechaEntrada());
+		calendar.add(Calendar.HOUR, -6);
+
+		tiquete.setFechaEntrada(calendar.getTime());
+		// Act
+		TiqueteParqueo tiqueteCosto = vigilanteService.calcularValorParqueadero(tiquete);
+		// Assert
+		Assert.assertEquals(6000, tiqueteCosto.getCostoParqueo());
+	}
+
+	@Test
+	public void costoParqueaderoUnDia() {
+		// Arragne
+		int costoDiaCarro = 8000;
+		TiqueteParqueo tiquete = new TiqueteCostoConFechaEntradaActualTestBuild().build();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(tiquete.getFechaEntrada());
+		calendar.add(Calendar.HOUR, -14);
+
+		tiquete.setFechaEntrada(calendar.getTime());
+		// Act
+		TiqueteParqueo tiqueteCosto = vigilanteService.calcularValorParqueadero(tiquete);
+		// Assert
+		Assert.assertEquals(costoDiaCarro, tiqueteCosto.getCostoParqueo());
+	}
 
 }
