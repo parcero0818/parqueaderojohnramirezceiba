@@ -17,8 +17,8 @@ public class TiqueteParqueo {
 	private String tipoVehiculo;
 	private int cilindrajeVehiculo;
 	private Date fechaEntrada;
-	private Date fechaSalida;
-	private int costoParqueo;
+	Date fechaSalida;
+	int costoParqueo;
 
 	public TiqueteParqueo() {
 
@@ -78,14 +78,5 @@ public class TiqueteParqueo {
 	public void setCostoParqueo(int costoParqueo) {
 		this.costoParqueo = costoParqueo;
 	}
-
-	public Date getFechaSalida() {
-		return fechaSalida;
-	}
-
-	public int getCostoParqueo() {
-		return costoParqueo;
-	}
-	
 
 }
