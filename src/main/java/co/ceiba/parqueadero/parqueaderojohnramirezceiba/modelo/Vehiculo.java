@@ -5,6 +5,9 @@ public class Vehiculo {
 	private String placa;
 	private int cilindraje;
 	private String tipoVehiculo;
+	
+	public Vehiculo() {
+	}
 
 	public Vehiculo(String placa, int cilindraje, String tipoVehiculo) {
 		super();

@@ -226,7 +226,8 @@ public class VigilanteService implements IVigilanteService {
 	public TiqueteParqueo registrarSalidaVehiculo(TiqueteParqueo tiquete, int costoParqueo) {
 		tiquete.setFechaSalida(new Date());
 		tiquete.setCostoParqueo(costoParqueo);
-		return tiqueteParqueoRepositorio.save(tiquete);
+		tiqueteParqueoRepositorio.save(tiquete);
+		return tiquete;
 	}
 
 	public int costoMenorUnaHora(TiqueteParqueo tiquete, int costoHoraCarro, int costoHoraMoto) {

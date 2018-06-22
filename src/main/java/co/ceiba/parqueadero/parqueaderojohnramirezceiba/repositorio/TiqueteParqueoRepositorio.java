@@ -20,5 +20,7 @@ public interface TiqueteParqueoRepositorio extends JpaRepository<TiqueteParqueo,
 	
 	@Query("select t from tiqueteParqueo t where t.fechaSalida is null")
 	List<TiqueteParqueo> vehiculosParqueados();
+	
+	
 
 }
