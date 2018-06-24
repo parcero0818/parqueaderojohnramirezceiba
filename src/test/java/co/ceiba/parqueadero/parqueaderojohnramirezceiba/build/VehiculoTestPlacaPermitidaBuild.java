@@ -9,7 +9,7 @@ public class VehiculoTestPlacaPermitidaBuild {
 	private String tipoVehiculo;
 
 	public VehiculoTestPlacaPermitidaBuild() {
-		this.placa = "PZV-283";
+		this.placa = "PZV-283343";
 		this.cilindraje = 220;
 		this.tipoVehiculo = "Carro";
 	}

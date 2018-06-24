@@ -245,37 +245,6 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		}
 	}
 
-	/**
-	 * @Test public void registrarIngresoVehiculo() { // Arrange VigilanteService
-	 *       vigilanteService = mock(VigilanteService.class);
-	 *       TiqueteParqueoRepositorio tiqueteParqueoRepositorio =
-	 *       mock(TiqueteParqueoRepositorio.class); ParqueaderoService
-	 *       parqueaderoService = mock(ParqueaderoService.class);
-	 *       PropiedadesRepositorio propiedadesRepositorio =
-	 *       mock(PropiedadesRepositorio.class); vigilanteService = new
-	 *       VigilanteService(tiqueteParqueoRepositorio, parqueaderoService,
-	 *       propiedadesRepositorio);
-	 *       when(parqueaderoService.verificarDisponibilidadCarro(tiqueteParqueoRepositorio)).thenReturn(true);
-	 *       Vehiculo vehiculo = new VehiculoTestPlacaPermitidaBuild().build();
-	 *       when(vigilanteService.obtenerVehiculoPorPlacaSalida(vehiculo.getPlaca())).thenReturn(null);
-	 * 
-	 *       when(propiedadesRepositorio.obtenerValorPropiedad("placas")).thenReturn("z,x");
-	 * 
-	 *       //
-	 *       when(vigilanteService.verificarPlaca(vehiculo.getPlaca())).thenReturn(false);
-	 *       Calendar calendar = Calendar.getInstance();
-	 * 
-	 *       TiqueteParqueo tiquete = new
-	 *       TiqueteCostoParqueaderoTestBuild().build();
-	 *       //when(tiqueteParqueoRepositorio.save(tiquete)).thenReturn(tiquete);
-	 *       when(vigilanteService.registrar(vehiculo)).thenReturn(tiquete);
-	 * 
-	 *       // Act TiqueteParqueo tiqu =
-	 *       vigilanteService.registrarIngreso(vehiculo, calendar); // Assert
-	 *       Assert.assertEquals(tiqu.getPlacaVehiculo(),
-	 *       tiquete.getPlacaVehiculo()); }
-	 */
-
 	@Test
 	public void registroPlacasAutorizadas() {
 		// Arrange
@@ -565,7 +534,8 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		Assert.assertTrue(tiquetes.size() > 0);
 
 	}
-
+	
+	//Registra en base de datos
 	@Test
 	public void registroVehiculoRest() {
 		// Arrange
