@@ -65,5 +65,11 @@ public class ParqueaderoRest {
 	public List<Tiquete> vehiculosParqueados() {
 		return vigilanteService.vehiculosParqueados();
 	}
+	
+	@CrossOrigin
+	@GetMapping(value = "/trm")
+	public Float trm() {
+		return vigilanteService.obtenerTrm();
+	}
 
 }
