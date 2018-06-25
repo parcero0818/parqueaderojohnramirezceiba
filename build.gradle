@@ -15,6 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jacoco'
+apply plugin: 'maven'
 
 group = 'co.ceiba.parqueadero'
 version = '0.0.1-SNAPSHOT'
@@ -29,6 +30,7 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile files('src/main/resources/clientJar/consumotrm-0.0.1-SNAPSHOT.jar')
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	
@@ -43,3 +45,4 @@ test {
 	}
 	reports.junitXml.destination = file("jacoco/test-results")
 }
+
