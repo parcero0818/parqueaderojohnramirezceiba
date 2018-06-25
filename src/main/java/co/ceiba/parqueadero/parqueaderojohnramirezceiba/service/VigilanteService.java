@@ -267,8 +267,9 @@ public class VigilanteService implements IVigilanteService {
 	public Float obtenerTrm() {
 		XMLGregorianCalendar xmlGregorianCalendar = null;
 		GregorianCalendar gregorianCalendar = new GregorianCalendar();
-		gregorianCalendar.setTime(new Date());
+
 		try {
+			gregorianCalendar.setTime(new Date());
 			DatatypeFactory dataTypeFactory = DatatypeFactory.newInstance();
 			xmlGregorianCalendar = dataTypeFactory.newXMLGregorianCalendar(gregorianCalendar);
 		} catch (DatatypeConfigurationException e) {
