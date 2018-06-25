@@ -234,7 +234,7 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		when(parqueaderoService.verificarDisponibilidadCarro(tiqueteParqueoRepositorio)).thenReturn(false);
 		Vehiculo vehiculo = new VehiculoTestPlacaPermitidaBuild().build();
 		Calendar calendar = Calendar.getInstance();
-		when(vigilanteService.obtenerVehiculoPorPlacaSalida(vehiculo.getPlaca())).thenReturn(null);
+		//when(vigilanteService.obtenerVehiculoPorPlacaSalida(vehiculo.getPlaca())).thenReturn(null);
 		// Act
 		try {
 			vigilanteService.registrarIngreso(vehiculo, calendar);
@@ -546,7 +546,7 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		vigilanteService = new VigilanteService(tiqueteParqueoRepositorio, parqueaderoService, propiedadesRepositorio);
 		when(parqueaderoService.verificarDisponibilidadCarro(tiqueteParqueoRepositorio)).thenReturn(false);
 		Vehiculo vehiculo = new VehiculoTestPlacaPermitidaBuild().build();
-		when(vigilanteService.obtenerVehiculoPorPlacaSalida(vehiculo.getPlaca())).thenReturn(null);
+		//when(vigilanteService.verificarPlacaRegistro(vehiculo.getPlaca())).thenReturn(null);
 		// Act
 		try {
 			parqueaderoRest.registrarIngresoVehiculo(vehiculo);

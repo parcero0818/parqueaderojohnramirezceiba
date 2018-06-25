@@ -20,6 +20,7 @@ import co.ceiba.parqueadero.parqueaderojohnramirezceiba.enums.PropiedadesParquea
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.enums.TipoVehiculoEnum;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.AutorizacionExcepcion;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.DisponibilidadExcepcion;
+import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.NoEncontradoExcepcion;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.RegistroExcepcion;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.excepcion.TipoVehiculoExcepcion;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Tiquete;
@@ -171,6 +172,9 @@ public class VigilanteService implements IVigilanteService {
 	}
 
 	public TiqueteParqueo obtenerVehiculoPorPlacaSalida(String placaVehiculo) {
+		if(null == tiqueteParqueoRepositorio.obtenerVehiculoPorPlaca(placaVehiculo)){
+			throw new NoEncontradoExcepcion("El vehiculo no se encuentra en el parqueadero");
+		}
 		return tiqueteParqueoRepositorio.obtenerVehiculoPorPlaca(placaVehiculo);
 	}
 

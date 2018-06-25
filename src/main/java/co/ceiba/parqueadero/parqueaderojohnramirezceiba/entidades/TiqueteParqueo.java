@@ -86,5 +86,9 @@ public class TiqueteParqueo {
 	public int getCostoParqueo() {
 		return costoParqueo;
 	}
+	
+	public Date getFechaSalida() {
+		return this.fechaSalida;
+	}
 
 }
