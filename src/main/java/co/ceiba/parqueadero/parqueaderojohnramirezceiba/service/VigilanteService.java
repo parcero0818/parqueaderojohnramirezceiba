@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -37,6 +38,8 @@ public class VigilanteService implements IVigilanteService {
 	ParqueaderoService parqueaderoService;
 	@Autowired
 	PropiedadesRepositorio propiedadesRepositorio;
+
+	private final Logger logger = Logger.getLogger(VigilanteService.class.getName());
 
 	public VigilanteService(TiqueteParqueoRepositorio tiqueteParqueoRepositorio, ParqueaderoService parqueaderoService,
 			PropiedadesRepositorio propiedadesRepositorio) {
@@ -273,7 +276,7 @@ public class VigilanteService implements IVigilanteService {
 			DatatypeFactory dataTypeFactory = DatatypeFactory.newInstance();
 			xmlGregorianCalendar = dataTypeFactory.newXMLGregorianCalendar(gregorianCalendar);
 		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
+			logger.info("Excepcion " + e.getMessage());
 		}
 		Itrm trm = new trmImpl(
 				"https://www.superfinanciera.gov.co/SuperfinancieraWebServiceTRM/TCRMServicesWebService/TCRMServicesWebService");
