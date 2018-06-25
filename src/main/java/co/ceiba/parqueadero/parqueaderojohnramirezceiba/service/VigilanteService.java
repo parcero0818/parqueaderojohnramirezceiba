@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +25,9 @@ import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Tiquete;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.modelo.Vehiculo;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.repositorio.PropiedadesRepositorio;
 import co.ceiba.parqueadero.parqueaderojohnramirezceiba.repositorio.TiqueteParqueoRepositorio;
+import co.ceiba.soaptrm.consumotrm.impl.Itrm;
+import co.ceiba.soaptrm.consumotrm.impl.trmImpl;
+import co.com.sc.nexura.superfinanciera.action.generic.services.trm.action.TcrmResponse;
 
 @Controller
 public class VigilanteService implements IVigilanteService {
@@ -254,6 +262,22 @@ public class VigilanteService implements IVigilanteService {
 			vehiculos.add(tiquete);
 		}
 		return vehiculos;
+	}
+
+	public Float obtenerTrm() {
+		XMLGregorianCalendar xmlGregorianCalendar = null;
+		GregorianCalendar gregorianCalendar = new GregorianCalendar();
+		gregorianCalendar.setTime(new Date());
+		try {
+			DatatypeFactory dataTypeFactory = DatatypeFactory.newInstance();
+			xmlGregorianCalendar = dataTypeFactory.newXMLGregorianCalendar(gregorianCalendar);
+		} catch (DatatypeConfigurationException e) {
+			e.printStackTrace();
+		}
+		Itrm trm = new trmImpl(
+				"https://www.superfinanciera.gov.co/SuperfinancieraWebServiceTRM/TCRMServicesWebService/TCRMServicesWebService");
+		TcrmResponse r = trm.queryTCRM(xmlGregorianCalendar);
+		return r.getValue();
 	}
 
 }

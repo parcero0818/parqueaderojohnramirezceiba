@@ -32,7 +32,7 @@ public class ParqueaderoRest {
 
 	@Autowired
 	PropiedadesRepositorio propiedadesRepositorio;
-
+	
 	@CrossOrigin
 	@PostMapping(value = "/registrarIngreso")
 	public String registrarIngresoVehiculo(@RequestBody Vehiculo vehiculo) {
@@ -64,6 +64,12 @@ public class ParqueaderoRest {
 	@GetMapping(value = "/vehiculosParqueados")
 	public List<Tiquete> vehiculosParqueados() {
 		return vigilanteService.vehiculosParqueados();
+	}
+	
+	@CrossOrigin
+	@GetMapping(value = "/trm")
+	public Float trm() {
+		return vigilanteService.obtenerTrm();
 	}
 
 }
