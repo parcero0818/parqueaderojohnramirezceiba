@@ -673,5 +673,25 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 		// Assert
 		Assert.assertEquals(costoDiaCarro, tiqueteCosto.getCostoParqueo());
 	}
+	
+	@Test
+	public void obtenerTrm() {
+		//Arrange
+		// Act
+		Float trm = vigilanteService.obtenerTrm();
+		// Asert
+		Assert.assertTrue(trm > 0);
+
+	}
+	
+	@Test
+	public void obtenerTrmRest() {
+		//Arrange
+		// Act
+		Float trm = parqueaderoRest.trm();
+		// Asert
+		Assert.assertTrue(trm > 0);
+
+	}
 
 }
