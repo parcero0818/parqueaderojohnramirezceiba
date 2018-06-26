@@ -63,7 +63,7 @@ public class VigilanteService implements IVigilanteService {
 		if ((verificarPlaca(vehiculo.getPlaca()) && verificarDiaSemana(calendar))) {
 			return true;
 		} else if (!(verificarPlaca(vehiculo.getPlaca()) && verificarDiaSemana(calendar))) {
-			throw new AutorizacionExcepcion("No esta autorizado");
+			throw new AutorizacionExcepcion("No esta autorizado para ingresar");
 		}
 		return false;
 	}
@@ -172,7 +172,7 @@ public class VigilanteService implements IVigilanteService {
 	}
 
 	public TiqueteParqueo obtenerVehiculoPorPlacaSalida(String placaVehiculo) {
-		if(null == tiqueteParqueoRepositorio.obtenerVehiculoPorPlaca(placaVehiculo)){
+		if (null == tiqueteParqueoRepositorio.obtenerVehiculoPorPlaca(placaVehiculo)) {
 			throw new NoEncontradoExcepcion("El vehiculo no se encuentra en el parqueadero");
 		}
 		return tiqueteParqueoRepositorio.obtenerVehiculoPorPlaca(placaVehiculo);
@@ -264,8 +264,8 @@ public class VigilanteService implements IVigilanteService {
 		List<TiqueteParqueo> listaVehiculos = tiqueteParqueoRepositorio.vehiculosParqueados();
 		List<Tiquete> vehiculos = new ArrayList<>();
 		for (TiqueteParqueo tiqueteParqueadero : listaVehiculos) {
-			Tiquete tiquete = new Tiquete(tiqueteParqueadero.getPlacaVehiculo(), tiqueteParqueadero.getTipoVehiculo(),
-					tiqueteParqueadero.getFechaEntrada());
+			Tiquete tiquete = new Tiquete(tiqueteParqueadero.getPlacaVehiculo().toUpperCase(),
+					tiqueteParqueadero.getTipoVehiculo().toLowerCase(), tiqueteParqueadero.getFechaEntrada());
 			vehiculos.add(tiquete);
 		}
 		return vehiculos;

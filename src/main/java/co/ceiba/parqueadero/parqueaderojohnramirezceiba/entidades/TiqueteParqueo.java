@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Size;
 
 @Entity(name = "tiqueteParqueo")
 public class TiqueteParqueo {
@@ -13,6 +14,7 @@ public class TiqueteParqueo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Size(max = 10)
 	private String placaVehiculo;
 	private String tipoVehiculo;
 	private int cilindrajeVehiculo;
@@ -86,7 +88,7 @@ public class TiqueteParqueo {
 	public int getCostoParqueo() {
 		return costoParqueo;
 	}
-	
+
 	public Date getFechaSalida() {
 		return this.fechaSalida;
 	}
