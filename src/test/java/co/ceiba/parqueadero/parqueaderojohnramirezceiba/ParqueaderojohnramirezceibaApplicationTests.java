@@ -290,7 +290,7 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 			vigilanteService.ingresoPlacaDiasNoAutorizados(vehiculo, calendar);
 		} catch (AutorizacionExcepcion e) {
 			// Assert
-			Assert.assertEquals("No esta autorizado", e.getMessage());
+			Assert.assertEquals("No esta autorizado para ingresar", e.getMessage());
 
 		}
 	}
@@ -624,7 +624,7 @@ public class ParqueaderojohnramirezceibaApplicationTests {
 			vigilanteService.registrarIngreso(vehiculo, calendar);
 		} catch (AutorizacionExcepcion e) {
 			// Assert
-			Assert.assertEquals("No esta autorizado", e.getMessage());
+			Assert.assertEquals("No esta autorizado para ingresar", e.getMessage());
 		}
 
 	}
